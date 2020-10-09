@@ -1,4 +1,5 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
+import Cell from './Cell'
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 const tableStyle = {
@@ -34,20 +35,48 @@ function Board(props) {
   
   const newBoard = createNewBoard(height, width)
   
-  const [boardData, setBoardData] = useState()
-  const [renderTable, setRenderTable] = useState(false)
-  const onResetBoard = () => {
-    setBoardData(newBoard)
-    setRenderTable(true)
-  }
+  const [boardData, setBoardData] = useState(newBoard)
+  // const [renderTable, setRenderTable] = useState(false)
  
+ 
+  let clickedCell=[]
+  
+
+
+  
+  const handleCellClick = (x, y, value) => {
+
+    if (clickedCell.length === 1) {
+      console.log('REAL THING')
+      let prevCell = clickedCell.pop()
+      
+      const prevX = prevCell[0]
+      const prevY = prevCell[1]
+      const prevVal = prevCell[2]
+      
+      boardData[prevX][prevY].value = value
+      boardData[x][y].value = prevVal
+      
+      let newBoardData = boardData.slice()
+      setBoardData(newBoardData)
+    
+  
+    } else if (clickedCell.length > 1) {
+      while (clickedCell.length>1) {
+        clickedCell.unshift()
+      }
+    } else {
+      clickedCell.push([x,y,value])
+    }
+  }
+  
   
   const renderTableHandle = (data) => {
     return data.map((row, index) => {
       return (
         <tr key={index+Math.floor(Math.random())}>
           {row.map((item) => {
-            return <td style={tdStyle} key={item.x*item.y}>{item.value}</td>
+            return <td onClick={()=>handleCellClick(item.x, item.y, item.value)} style={tdStyle} key={item.x * item.y}><Cell  x={item.x} y={item.y} value={item.value} /></td>
           })}
         </tr>
       )
@@ -56,9 +85,9 @@ function Board(props) {
   
   return (
     <div>
-      <button style={buttonStyle} onClick={()=>onResetBoard()}>START GAME</button>
+     
       <table style={tableStyle}>
-        {renderTable?renderTableHandle(newBoard):'Click to start a game!'} 
+        {renderTableHandle(boardData)} 
            
 </table>
     

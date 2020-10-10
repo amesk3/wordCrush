@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
 
-const alphabet = 'abcdefgh'
+const alphabet = 'ABCDEFGH'
 const tableStyle = {
   margin: '3rem',
   border: '3rem'
-}
-const buttonStyle = {
-  margin:'3rem',
 }
 
 const tdStyle = {
@@ -35,10 +32,18 @@ function Board(props) {
   
   const newBoard = createNewBoard(height, width)
   const [boardData, setBoardData] = useState(newBoard)
+  const [firstDrop, setFirstDrop] = useState(true)
   let clickedCell=[]
   
   const handleCellClick = (x, y, value) => {
-
+    if (firstDrop) {
+      let newData = boardData.slice()
+      crushVertical(newData)
+      crushHorizontal(newData)
+      setBoardData(newData)
+      setTimeout(() => drop(newData), 1000)
+      setFirstDrop(false)
+    }
     if (clickedCell.length === 1) {
       let prevCell = clickedCell.pop()
       
@@ -49,28 +54,22 @@ function Board(props) {
       boardData[prevX][prevY].value = value
       boardData[x][y].value = prevVal
       
-      let newBoardData = boardData.slice()
-      crushVertical(newBoardData)
-      crushHorizontal(newBoardData)
-
-      drop(newBoardData)
-      setBoardData(newBoardData)
+      let newData = boardData.slice()
+      crushVertical(newData)
+      crushHorizontal(newData)
+      setBoardData(newData)
+      setTimeout(()=>drop(newData), 1000)
+     
     
   
-    } else if (clickedCell.length > 1) {
-      while (clickedCell.length>1) {
-        clickedCell.unshift()
-      }
-    } else {
+      } else {
       clickedCell.push([x,y,value])
     }
   }
   
   const crushHorizontal = (board) => {
-    console.log('CRUSHING')
     for (let i = 0; i < board.length; i++) {
       for (let j = 2; j < board[0].length; j++) {
-        console.log(board[i][j - 2].value, board[i][j - 1].value, board[i][j].value)
         if (board[i][j - 2].value === board[i][j - 1].value && board[i][j - 1].value === board[i][j].value) {
           board[i][j - 2].value = ''
           board[i][j - 1].value = ''
@@ -82,7 +81,6 @@ function Board(props) {
   const crushVertical = board=>{
     for (let j = 0; j < board[0].length; j++) {
       for (let i = 2; i < board.length; i++) {
-        console.log('OTHER', board[i - 2][j].value, board[i - 1][j].value, board[i][j].value)
         if (board[i - 2][j].value === board[i - 1][j].value && board[i - 1][j].value === board[i][j].value) {
           board[i - 2][i].value = ''
           board[i - 1][j].value = ''
@@ -95,8 +93,6 @@ function Board(props) {
   }
   
   const drop = (board) => {
-    console.log('DROPPING')
-
     for (let j = 0; j < board[0].length; j++) {
       let offset = 0
       for (let i = board.length - 1; i >= 0; i--) {
@@ -108,11 +104,13 @@ function Board(props) {
         }
       }
     }
-
+    let newBoard = board.slice()
+    setBoardData(newBoard)
   }
   
   
-  const renderTableHandle = (data) => {
+  const renderTableHandle = (data, firstDrop= false) => {
+    if (firstDrop) { setFirstDrop(false) }
     return data.map((row, index) => {
       return (
         <tr key={index+Math.floor(Math.random())}>
@@ -128,9 +126,8 @@ function Board(props) {
     <div>
      
       <table style={tableStyle}>
-        {renderTableHandle(boardData)} 
-           
-</table>
+        {renderTableHandle(boardData)}    
+      </table>
     
   
     </div>

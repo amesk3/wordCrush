@@ -1,11 +1,8 @@
 # Word Crush
 ## A fun game like candy crush, but with letters!
-<<<<<<< HEAD
 
 ![Word Crush](/public/wordCrushImg.jpg?raw=true)
 
-=======
->>>>>>> 7cb8b4b81d2d99524b341c6315eb84aaffce163c
 ## Technologies
 
 This front end project was built using React, and uses hooks extensively.

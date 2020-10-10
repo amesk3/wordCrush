@@ -2,13 +2,20 @@ import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
 
 const alphabet = 'ABCDEFGH'
+
+const body = {
+  display: 'flex',
+  justifyContent: 'center',
+
+}
 const tableStyle = {
-  margin: '3rem',
-  border: '3rem'
+  backgroundColor: 'pink',
+  margin: '3rem 10rem 1rem 10rem',
 }
 
 const tdStyle = {
-  fontSize: '100px',
+  fontSize: '20px',
+  fontFamily: 'Cutive Mono, monospace',
   padding: '1rem',
   textAlign:'center'
 
@@ -123,7 +130,7 @@ function Board(props) {
   }
   
   return (
-    <div>
+    <div style={body}>
      
       <table style={tableStyle}>
         {renderTableHandle(boardData)}    

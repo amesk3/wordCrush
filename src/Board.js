@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
 
-const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+const alphabet = 'abcdefgh'
 const tableStyle = {
   margin: '3rem',
   border: '3rem'
@@ -26,7 +26,7 @@ function Board(props) {
       data.push([])
       for (let j = 0; j < width; j++) {
         data[i][j] = {
-          x: i, y: j, value: alphabet[Math.floor(Math.random() * 26)]
+          x: i, y: j, value: alphabet[Math.floor(Math.random() * alphabet.length)]
         }
       }
     }
@@ -34,20 +34,12 @@ function Board(props) {
   }
   
   const newBoard = createNewBoard(height, width)
-  
   const [boardData, setBoardData] = useState(newBoard)
-  // const [renderTable, setRenderTable] = useState(false)
- 
- 
   let clickedCell=[]
-  
-
-
   
   const handleCellClick = (x, y, value) => {
 
     if (clickedCell.length === 1) {
-      console.log('REAL THING')
       let prevCell = clickedCell.pop()
       
       const prevX = prevCell[0]
@@ -58,6 +50,10 @@ function Board(props) {
       boardData[x][y].value = prevVal
       
       let newBoardData = boardData.slice()
+      crushVertical(newBoardData)
+      crushHorizontal(newBoardData)
+
+      drop(newBoardData)
       setBoardData(newBoardData)
     
   
@@ -68,6 +64,51 @@ function Board(props) {
     } else {
       clickedCell.push([x,y,value])
     }
+  }
+  
+  const crushHorizontal = (board) => {
+    console.log('CRUSHING')
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 2; j < board[0].length; j++) {
+        console.log(board[i][j - 2].value, board[i][j - 1].value, board[i][j].value)
+        if (board[i][j - 2].value === board[i][j - 1].value && board[i][j - 1].value === board[i][j].value) {
+          board[i][j - 2].value = ''
+          board[i][j - 1].value = ''
+          board[i][j].value = ''
+        }
+      }
+    }
+  }
+  const crushVertical = board=>{
+    for (let j = 0; j < board[0].length; j++) {
+      for (let i = 2; i < board.length; i++) {
+        console.log('OTHER', board[i - 2][j].value, board[i - 1][j].value, board[i][j].value)
+        if (board[i - 2][j].value === board[i - 1][j].value && board[i - 1][j].value === board[i][j].value) {
+          board[i - 2][i].value = ''
+          board[i - 1][j].value = ''
+          board[i][j].value = ''
+        }
+      }
+    }
+    
+    
+  }
+  
+  const drop = (board) => {
+    console.log('DROPPING')
+
+    for (let j = 0; j < board[0].length; j++) {
+      let offset = 0
+      for (let i = board.length - 1; i >= 0; i--) {
+        if (board[i][j].value === '') {
+          offset++
+        } else {
+          board[i + offset][j].value = board[i][j].value
+          board[i][j].value = (offset>0)?'':board[i][j].value
+        }
+      }
+    }
+
   }
   
   

@@ -1,6 +1,8 @@
 # Word Crush
 ## A fun game like candy crush, but with letters!
 
+https://drive.google.com/file/d/1QYX-1NsS1rYoP9XpLIUr_-73dgA-ERoS/view?usp=sharing
+
 ## Technologies
 
 This front end project was built using React, and uses hooks extensively.

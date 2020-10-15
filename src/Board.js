@@ -53,30 +53,9 @@ function Board(props) {
       
       let newData = boardData.slice()
       let called = true
-      crushAndSet(newData, 1500)
-
-      // crushVertical(newData)
-      // crushHorizontal(newData)
-      // setBoardData(newData)
-      // setTimeout(() => drop(newData), 1500)
-      // while (called) {
-      //   crushVertical(newData)
-      //   crushHorizontal(newData)
-      //   if (JSON.stringify(newData) === JSON.stringify(startData)) {
-      //     called = false
-      //   } else { called = true }
-      //   setBoardData(newData)
-      //   setTimeout(() => drop(newData), 1500)
-      // }
-    
-  
-    
+      crushAndSet(newData, 1500)    
     } else {
       crushAndSet(boardData, 1500)
-      // crushVertical(boardData)
-      // crushHorizontal(boardData)
-      // setBoardData(boardData)
-      // setTimeout(() => drop(boardData), 1500)
       clickedCell.push([x,y,value])
     }
   }

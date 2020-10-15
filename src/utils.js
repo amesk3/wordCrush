@@ -21,8 +21,7 @@ export const crushVertical = board => {
         board[i - 2][i].value = ''
         board[i - 1][j].value = ''
           board[i][j].value = ''
-        }
-          , 1500)
+                  }, 1500)
       }
     }
   }

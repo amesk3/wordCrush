@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
-import { crushHorizontal, crushVertical, dropFunc} from './utils'
+import { crushHorizontal, crushVertical, dropFunc } from './utils'
+import styled from 'styled-components'
 
 const alphabet = 'ABCDEFGH'
+
+const HoverText = styled.p`
+	color: 'white';
+	:hover {
+		color: #ed1212;
+		cursor: pointer;
+    padding: 0px;
+	}
+`
 
 const body = {
   display: 'flex',
@@ -17,7 +27,7 @@ const tableStyle = {
 const tdStyle = {
   fontSize: '20px',
   fontFamily: 'Cutive Mono, monospace',
-  padding: '1rem',
+  padding: '0 1rem 0 1rem ',
   textAlign:'center'
 
 }
@@ -89,31 +99,6 @@ function Board(props) {
     }
   }
   
-  // const crushHorizontal = (board) => {
-  //   for (let i = 0; i < board.length; i++) {
-  //     for (let j = 2; j < board[0].length; j++) {
-  //       if (board[i][j - 2].value === board[i][j - 1].value && board[i][j - 1].value === board[i][j].value) {
-  //         board[i][j - 2].value = ''
-  //         board[i][j - 1].value = ''
-  //         board[i][j].value = ''
-  //       }
-  //     }
-  //   }
-  // }
-  // const crushVertical = board=>{
-  //   for (let j = 0; j < board[0].length; j++) {
-  //     for (let i = 2; i < board.length; i++) {
-  //       if (board[i - 2][j].value === board[i - 1][j].value && board[i - 1][j].value === board[i][j].value) {
-  //         board[i - 2][i].value = ''
-  //         board[i - 1][j].value = ''
-  //         board[i][j].value = ''
-  //       }
-  //     }
-  //   }
-    
-    
-  // }
-  
   const drop = (board) => {
     dropFunc(board)
     let newBoard = board.slice()
@@ -122,14 +107,17 @@ function Board(props) {
   
   
   const renderTableHandle = (data) => {
-  
-     
-    
     return data.map((row, index) => {
       return (
         <tr key={index+Math.floor(Math.random())}>
           {row.map((item) => {
-            return <td onClick={()=>handleCellClick(item.x, item.y, item.value)} style={tdStyle} key={item.x * item.y+Math.floor(Math.random())}><Cell  x={item.x} y={item.y} value={item.value} /></td>
+            return <td class="cell" onClick={() => handleCellClick(item.x, item.y, item.value)} style={tdStyle} key={item.x * item.y + Math.floor(Math.random())}>
+              <HoverText>
+                <Cell x={item.x} y={item.y} value={item.value} />
+              </HoverText>
+
+                </td>
+    
           })}
         </tr>
       )

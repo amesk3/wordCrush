@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
+import { crushHorizontal, crushVertical, dropFunc} from './utils'
 
 const alphabet = 'ABCDEFGH'
 
@@ -41,8 +42,8 @@ function Board(props) {
   const [boardData, setBoardData] = useState(newBoard)
   const [firstDrop, setFirstDrop] = useState(true)
   let clickedCell=[]
-  
   const handleCellClick = (x, y, value) => {
+    let startData = boardData.slice()
     if (firstDrop) {
       let newData = boardData.slice()
       crushVertical(newData)
@@ -51,7 +52,7 @@ function Board(props) {
       setTimeout(() => drop(newData), 1000)
       setFirstDrop(false)
     }
-    if (clickedCell.length === 1) {
+    if (clickedCell.length >= 1 ) {
       let prevCell = clickedCell.pop()
       
       const prevX = prevCell[0]
@@ -62,67 +63,73 @@ function Board(props) {
       boardData[x][y].value = prevVal
       
       let newData = boardData.slice()
+      let called = true
       crushVertical(newData)
       crushHorizontal(newData)
       setBoardData(newData)
-      setTimeout(()=>drop(newData), 1000)
-     
+      setTimeout(() => drop(newData), 1500)
+      while (called) {
+        crushVertical(newData)
+        crushHorizontal(newData)
+        if (JSON.stringify(newData) === JSON.stringify(startData)) {
+          called = false
+        } else { called = true }
+        setBoardData(newData)
+        setTimeout(() => drop(newData), 1500)
+      }
     
   
-      } else {
+    
+    } else {
+      crushVertical(boardData)
+      crushHorizontal(boardData)
+      setBoardData(boardData)
+      setTimeout(() => drop(boardData), 1500)
       clickedCell.push([x,y,value])
     }
   }
   
-  const crushHorizontal = (board) => {
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 2; j < board[0].length; j++) {
-        if (board[i][j - 2].value === board[i][j - 1].value && board[i][j - 1].value === board[i][j].value) {
-          board[i][j - 2].value = ''
-          board[i][j - 1].value = ''
-          board[i][j].value = ''
-        }
-      }
-    }
-  }
-  const crushVertical = board=>{
-    for (let j = 0; j < board[0].length; j++) {
-      for (let i = 2; i < board.length; i++) {
-        if (board[i - 2][j].value === board[i - 1][j].value && board[i - 1][j].value === board[i][j].value) {
-          board[i - 2][i].value = ''
-          board[i - 1][j].value = ''
-          board[i][j].value = ''
-        }
-      }
-    }
+  // const crushHorizontal = (board) => {
+  //   for (let i = 0; i < board.length; i++) {
+  //     for (let j = 2; j < board[0].length; j++) {
+  //       if (board[i][j - 2].value === board[i][j - 1].value && board[i][j - 1].value === board[i][j].value) {
+  //         board[i][j - 2].value = ''
+  //         board[i][j - 1].value = ''
+  //         board[i][j].value = ''
+  //       }
+  //     }
+  //   }
+  // }
+  // const crushVertical = board=>{
+  //   for (let j = 0; j < board[0].length; j++) {
+  //     for (let i = 2; i < board.length; i++) {
+  //       if (board[i - 2][j].value === board[i - 1][j].value && board[i - 1][j].value === board[i][j].value) {
+  //         board[i - 2][i].value = ''
+  //         board[i - 1][j].value = ''
+  //         board[i][j].value = ''
+  //       }
+  //     }
+  //   }
     
     
-  }
+  // }
   
   const drop = (board) => {
-    for (let j = 0; j < board[0].length; j++) {
-      let offset = 0
-      for (let i = board.length - 1; i >= 0; i--) {
-        if (board[i][j].value === '') {
-          offset++
-        } else {
-          board[i + offset][j].value = board[i][j].value
-          board[i][j].value = (offset>0)?'':board[i][j].value
-        }
-      }
-    }
+    dropFunc(board)
     let newBoard = board.slice()
     setBoardData(newBoard)
   }
   
   
-  const renderTableHandle = (data, firstDrop= false) => {
-    if (firstDrop) { setFirstDrop(false) }
+  const renderTableHandle = (data) => {
+  
+     
+    
     return data.map((row, index) => {
       return (
         <tr key={index+Math.floor(Math.random())}>
           {row.map((item) => {
-            return <td onClick={()=>handleCellClick(item.x, item.y, item.value)} style={tdStyle} key={item.x * item.y}><Cell  x={item.x} y={item.y} value={item.value} /></td>
+            return <td onClick={()=>handleCellClick(item.x, item.y, item.value)} style={tdStyle} key={item.x * item.y+Math.floor(Math.random())}><Cell  x={item.x} y={item.y} value={item.value} /></td>
           })}
         </tr>
       )

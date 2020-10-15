@@ -28,15 +28,32 @@ const tdStyle = {
   fontFamily: 'Cutive Mono, monospace',
   padding: '0 1rem 0 1rem ',
   textAlign:'center'
+}
 
+const formStyle = {
+  margin: '10rem 0 0 5rem'
 }
 
 function Board(props) {
-  const { height, width } = props
-  
-  const newBoard = createNewBoard(height, width)
+  // const { height, width } = props
+  const [height, setHeight] = useState(10)
+  const [width, setWidth] = useState(12)  
+  let newBoard = createNewBoard(height, width)
   const [boardData, setBoardData] = useState(newBoard)
+  
   let clickedCell = []
+
+  useEffect(() => {
+    setBoardData(createNewBoard(height, width))
+    renderTableHandle(boardData)
+  },[height, width]);
+  
+  const handleSubmit = () => {
+    setHeight(height)
+    setWidth(width)
+    
+  }
+  
   
   
   const handleCellClick = (x, y, value) => {
@@ -93,10 +110,17 @@ function Board(props) {
       )
     })
   }
-  
   return (
     <div style={body}>
-     
+      <form style={formStyle}>
+        <h5>Row size
+      <input value={height} onChange={e => setHeight(e.target.value)} /></h5>
+        <h5>
+      Column size
+      <input value={width} onChange={e => setWidth(e.target.value)} />
+        </h5>
+        <button type="submit" value="Submit" onClick={()=>handleSubmit}>Resize board </button>
+      </form>
       <table style={tableStyle}>
         {renderTableHandle(boardData)}    
       </table>

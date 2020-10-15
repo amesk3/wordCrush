@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import Board from './Board'
 
 const body = {
@@ -15,13 +15,13 @@ const header = {
 }
 
 
-function Game() {
-  const [height, setHeight] = useState(10)
-  const [width, setWidth] = useState(12)
+function Game() {  
   return (
     <div style={body}>
       <div>
-      <h1 style={header}>Word Crush</h1>
+        <h1 style={header}>Word Crush</h1>
+        
+
         <h2>Instructions</h2>
         <p>
           1.Click on any cell to start crushing!
@@ -34,7 +34,7 @@ function Game() {
         </p>
       <footer> Game crafted by Amy Kim (www.github.com/amesk3)</footer>
       </div>
-      <Board height={height} width={width} />
+      <Board/>
     </div>
   );
 }

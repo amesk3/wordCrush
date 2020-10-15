@@ -35,7 +35,6 @@ const formStyle = {
 }
 
 function Board(props) {
-  // const { height, width } = props
   const [height, setHeight] = useState(10)
   const [width, setWidth] = useState(12)  
   let newBoard = createNewBoard(height, width)
@@ -57,7 +56,6 @@ function Board(props) {
   
   
   const handleCellClick = (x, y, value) => {
-    let startData = boardData.slice()
     if (clickedCell.length >= 1 ) {
       let prevCell = clickedCell.pop()
       
@@ -69,7 +67,6 @@ function Board(props) {
       boardData[x][y].value = prevVal
       
       let newData = boardData.slice()
-      let called = true
       crushAndSet(newData, 1500)    
     } else {
       crushAndSet(boardData, 1500)
@@ -102,7 +99,6 @@ function Board(props) {
               <HoverText>
                 <Cell x={item.x} y={item.y} value={item.value} />
               </HoverText>
-
                 </td>
     
           })}
@@ -119,7 +115,7 @@ function Board(props) {
       Column size
       <input value={width} onChange={e => setWidth(e.target.value)} />
         </h5>
-        <button type="submit" value="Submit" onClick={()=>handleSubmit}>Resize board </button>
+        <button type="submit" value="Submit" onClick={()=>handleSubmit}> Reset to default </button>
       </form>
       <table style={tableStyle}>
         {renderTableHandle(boardData)}    

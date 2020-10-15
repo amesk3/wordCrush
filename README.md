@@ -1,7 +1,7 @@
 # Word Crush
 ## A fun game like candy crush, but with letters!
 
-![Word Crush](/public/wordCrushImg.jpg?raw=true)
+![Word Crush](./public/wordCrushImg.png?raw=true)
 
 ## Technologies
 

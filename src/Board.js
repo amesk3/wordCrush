@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Cell from './Cell'
-import { crushHorizontal, crushVertical, dropFunc } from './utils'
+import { crushHorizontal, crushVertical, dropFunc, createNewBoard } from './utils'
 import styled from 'styled-components'
 
-const alphabet = 'ABCDEFGH'
 
 const HoverText = styled.p`
 	color: 'white';
@@ -34,34 +33,14 @@ const tdStyle = {
 
 function Board(props) {
   const { height, width } = props
-
-  const createNewBoard = (height, width) => {
-    let data = []
-    for (let i = 0; i < height; i++) {
-      data.push([])
-      for (let j = 0; j < width; j++) {
-        data[i][j] = {
-          x: i, y: j, value: alphabet[Math.floor(Math.random() * alphabet.length)]
-        }
-      }
-    }
-    return data
-  }
   
   const newBoard = createNewBoard(height, width)
   const [boardData, setBoardData] = useState(newBoard)
-  const [firstDrop, setFirstDrop] = useState(true)
-  let clickedCell=[]
+  let clickedCell = []
+  
+  
   const handleCellClick = (x, y, value) => {
     let startData = boardData.slice()
-    if (firstDrop) {
-      let newData = boardData.slice()
-      crushVertical(newData)
-      crushHorizontal(newData)
-      setBoardData(newData)
-      setTimeout(() => drop(newData), 1000)
-      setFirstDrop(false)
-    }
     if (clickedCell.length >= 1 ) {
       let prevCell = clickedCell.pop()
       
@@ -74,29 +53,40 @@ function Board(props) {
       
       let newData = boardData.slice()
       let called = true
-      crushVertical(newData)
-      crushHorizontal(newData)
-      setBoardData(newData)
-      setTimeout(() => drop(newData), 1500)
-      while (called) {
-        crushVertical(newData)
-        crushHorizontal(newData)
-        if (JSON.stringify(newData) === JSON.stringify(startData)) {
-          called = false
-        } else { called = true }
-        setBoardData(newData)
-        setTimeout(() => drop(newData), 1500)
-      }
+      crushAndSet(newData, 1500)
+
+      // crushVertical(newData)
+      // crushHorizontal(newData)
+      // setBoardData(newData)
+      // setTimeout(() => drop(newData), 1500)
+      // while (called) {
+      //   crushVertical(newData)
+      //   crushHorizontal(newData)
+      //   if (JSON.stringify(newData) === JSON.stringify(startData)) {
+      //     called = false
+      //   } else { called = true }
+      //   setBoardData(newData)
+      //   setTimeout(() => drop(newData), 1500)
+      // }
     
   
     
     } else {
-      crushVertical(boardData)
-      crushHorizontal(boardData)
-      setBoardData(boardData)
-      setTimeout(() => drop(boardData), 1500)
+      crushAndSet(boardData, 1500)
+      // crushVertical(boardData)
+      // crushHorizontal(boardData)
+      // setBoardData(boardData)
+      // setTimeout(() => drop(boardData), 1500)
       clickedCell.push([x,y,value])
     }
+  }
+  
+  const crushAndSet = (data,  waitTime) => {
+    crushVertical(data)
+    crushHorizontal(data)
+    setBoardData(data)
+    setTimeout(() => drop(data), waitTime)
+  
   }
   
   const drop = (board) => {
@@ -104,6 +94,7 @@ function Board(props) {
     let newBoard = board.slice()
     setBoardData(newBoard)
   }
+  
   
   
   const renderTableHandle = (data) => {

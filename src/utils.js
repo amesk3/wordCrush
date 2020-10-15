@@ -1,3 +1,18 @@
+
+export const createNewBoard = (height, width, alphabet = 'ABCDEFGH') => {
+  let data = []
+  for (let i = 0; i < height; i++) {
+    data.push([])
+    for (let j = 0; j < width; j++) {
+      data[i][j] = {
+        x: i, y: j, value: alphabet[Math.floor(Math.random() * alphabet.length)]
+      }
+    }
+  }
+  return data
+}
+
+
 export const crushHorizontal = (board) => {
 
   for (let i = 0; i < board.length; i++) {
@@ -21,7 +36,8 @@ export const crushVertical = board => {
         board[i - 2][i].value = ''
         board[i - 1][j].value = ''
           board[i][j].value = ''
-                  }, 1500)
+                  }
+        , 1500)
       }
     }
   }

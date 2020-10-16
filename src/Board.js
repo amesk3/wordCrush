@@ -44,7 +44,6 @@ function Board(props) {
 
   useEffect(() => {
     setBoardData(createNewBoard(height, width))
-    renderTableHandle(boardData)
   },[height, width]);
   
   const handleSubmit = () => {

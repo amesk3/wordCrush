@@ -21,16 +21,15 @@ function Game() {
       <div>
         <h1 style={header}>Word Crush</h1>
         
-
         <h2>Instructions</h2>
         <p>
           1.Click on any cell to start crushing!
         </p>
           <p>        
-          2. Find letters that are consecutively the same for three letters.        
+          2. Find letters you could swap to make three consecutively same letters. This will initiate crush then drop.    
         </p>
         <p>        
-        3. Or find letters you could swap to make three consecutively same letters.
+        3. Eliminate as many letters as possible.
         </p>
       <footer> Game crafted by Amy Kim (www.github.com/amesk3)</footer>
       </div>
